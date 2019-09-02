@@ -1,0 +1,21 @@
+{
+  "private": true,
+  "name": "next-mdx",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@mdx-js/loader": "^1.4.0",
+    "@mdx-js/mdx": "^1.4.0",
+    "@mdx-js/runtime": "^1.4.0",
+    "@next/mdx": "^9.0.3",
+    "next": "^9.0.3",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "remark-emoji": "^2.0.2",
+    "remark-images": "^1.0.0"
+  }
+}
