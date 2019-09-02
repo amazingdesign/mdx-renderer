@@ -6,10 +6,25 @@ import QueryContext from '../QueryContext'
 
 const mdComponents = {}
 
-export default ({ Component, ...props }) => (
-  <MDXProvider components={mdComponents}>
-    <QueryContext.Provider value={props && props.router && props.router.query}>
-      <Component {...props} />
-    </QueryContext.Provider>
-  </MDXProvider>
-)
+const App = ({ Component, ...props }) => {
+  const query = (
+    props &&
+    props.router &&
+    props.router.ServerRouter ?
+      props.router.ServerRouter.query
+      :
+      props.router.query
+  )
+
+  return (
+    <MDXProvider components={mdComponents}>
+      <QueryContext.Provider value={query}>
+        <Component {...props} />
+      </QueryContext.Provider>
+    </MDXProvider>
+  )
+}
+
+App.getInitialProps = ({ query }) => ({})
+
+export default App
