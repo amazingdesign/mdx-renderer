@@ -1,14 +1,15 @@
 import React from 'react'
-import MDX from '@mdx-js/runtime'
 
-const Tip = ({children}) => (
+import MD from './MD'
+
+const Tip = ({ children }) => (
   <React.Fragment>
     <h1>
       💡
     </h1>
-    <MDX>
+    <MD>
       {children}
-    </MDX>
+    </MD>
   </React.Fragment>
 )
 
