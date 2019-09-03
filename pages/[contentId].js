@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 import MDX from '@mdx-js/runtime'
 
-import WaitingForResponsive from '../components/WaitingForResponsive'
+import WaitingForResponsive from '../src/components/WaitingForResponsive'
 
 const ContentDisplayer = ({ mdxContent }) => {
   const [isServer, setIsServer] = useState(true)
