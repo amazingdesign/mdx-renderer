@@ -6,7 +6,7 @@ const withMDX = require('@next/mdx')({
   options: {
     remarkPlugins: [images, emoji]
   },
-  scope: { name: 'Mateusz' }
+  scope: 'import * as Components from "./components"'
 })
 
 module.exports = withMDX({
