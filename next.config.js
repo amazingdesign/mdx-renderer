@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const images = require('remark-images')
 const emoji = require('remark-emoji')
 
@@ -10,6 +12,9 @@ const withMDX = require('@next/mdx')({
 })
 
 module.exports = withMDX({
+  env: {
+    CONTENT_ENDPOINT: process.env.CONTENT_ENDPOINT,
+  },
   pageExtensions: ['js', 'jsx', 'md', 'mdx'],
   webpack: (config, { isServer }) => {
     // Fixes npm packages that depend on `fs` module
@@ -18,7 +23,7 @@ module.exports = withMDX({
         fs: 'empty'
       }
     }
-
+    
     return config
   }
 })

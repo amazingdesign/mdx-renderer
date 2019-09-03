@@ -1,15 +1,15 @@
 import React from 'react'
 
-import MD from './MD'
+import MDX from '@mdx-js/runtime'
 
 const Optional = ({ title, children }) => (
   <React.Fragment>
     <h3>
       [OPCJONALNY] {title}
     </h3>
-    <MD>
+    <MDX>
       {children}
-    </MD>
+    </MDX>
   </React.Fragment>
 )
 
