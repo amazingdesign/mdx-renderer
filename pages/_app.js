@@ -51,13 +51,13 @@ App.getInitialProps = async (ctx) => {
     ctx.router.query.contentId
   )
 
-  const url = process.env.CONTENT_ENDPOINT + '/' + contentId + '.json'
+  const url = process.env.CONTENT_ENDPOINT + '/' + contentId
 
   const res = await fetch(url)
   const data = await res.json()
 
   return {
-    mdxContent: data
+    mdxContent: data && data.content
   }
 }
 
