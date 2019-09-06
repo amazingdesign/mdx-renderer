@@ -1,5 +1,5 @@
 import React from 'react'
-import ContentDisplayer from '../src/components/ContentDisplayer'
+import ContentDisplayer from '../../src/components/ContentDisplayer'
 
 const ContentIdPage = (props) => (
   <ContentDisplayer {...props} />

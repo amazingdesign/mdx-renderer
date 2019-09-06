@@ -7,8 +7,11 @@ import { MDXProvider } from '@mdx-js/react'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { ThemeProvider } from '@material-ui/styles'
 
-import mdxComponents from '../src/mdxComponents'
+import db from '../src/db'
+
+import withError from '../src/withError'
 import QueryContext from '../src/QueryContext'
+import mdxComponents from '../src/mdxComponents'
 
 import '../src/markdown.css'
 import theme from '../src/theme'
@@ -42,23 +45,59 @@ const App = ({ Component, ...props }) => {
   )
 }
 
-App.getInitialProps = async (ctx) => {
-  const fetch = require('node-fetch')
+App.getInitialProps = async ({ router: { pathname }, ctx: { req, query } }) => {
+  if (!req) return
+
+  let mdxContent = null
+  let statusCode = 200
 
   const contentId = (
-    ctx.router &&
-    ctx.router.query &&
-    ctx.router.query.contentId
+    query &&
+    query.contentId
   )
 
-  const url = process.env.CONTENT_ENDPOINT + '/' + contentId
+  if (pathname === '/[contentId]') {
+    const fetch = require('node-fetch')
 
-  const res = await fetch(url)
-  const data = await res.json()
+    const url = process.env.CONTENT_ENDPOINT + '/' + contentId
+
+    const res = await fetch(url)
+    const data = await res.json()
+
+    mdxContent = data.content
+  }
+
+  if (pathname === '/tmp/[contentId]') {
+
+    const findTmpContentPromise = new Promise((resolve, reject) => {
+      db.findOne(
+        { _id: contentId },
+        (err, doc) => {
+          if (err) {
+            resolve(null)
+            statusCode = err.status || err.code || 500
+          }
+          if (!doc) {
+            resolve(null)
+            statusCode = 404
+          }
+
+          db.remove({ _id: contentId })
+
+          resolve(doc)
+        }
+      )
+    })
+
+    const data = await findTmpContentPromise
+
+    mdxContent = data && data.content
+  }
 
   return {
-    mdxContent: data && data.content
+    statusCode,
+    mdxContent
   }
 }
 
-export default App
+export default withError(App)
