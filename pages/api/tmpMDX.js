@@ -10,7 +10,7 @@ export default (req, res) => {
 
       setTimeout(
       () => db.remove({ _id: newDoc._id }),
-        5000
+        5 * 60 * 1000
       )
       
       res.json(newDoc)

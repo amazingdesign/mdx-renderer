@@ -4,7 +4,7 @@ import MDX from '@mdx-js/runtime'
 
 import WaitingForResponsive from './WaitingForResponsive'
 
-const ContentDisplayer = ({ mdxContent }) => {
+const ContentDisplayer = ({ mdxContent, displayWaitingForResponsive }) => {
   const [isServer, setIsServer] = useState(true)
 
   useEffect(() => {
@@ -14,7 +14,7 @@ const ContentDisplayer = ({ mdxContent }) => {
   return (
     <div>
       {
-        isServer ?
+        displayWaitingForResponsive && isServer ?
           <WaitingForResponsive />
           :
           null
