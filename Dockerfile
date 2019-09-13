@@ -4,6 +4,8 @@ WORKDIR /app
 
 COPY package.json package-lock.json ./
 
+RUN npm config set '@bit:registry' https://node.bit.dev
+
 RUN npm install
 
 COPY . .
