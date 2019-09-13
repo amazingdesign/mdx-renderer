@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-import { getConfigOrFail } from '@bit/amazingdesign.utils.config'
+import { getConfig, getConfigOrFail } from '@bit/amazingdesign.utils.config'
 import { useRouter } from 'next/router'
 import { MDXProvider } from '@mdx-js/react'
 
@@ -15,6 +15,8 @@ import mdxComponents from '../src/mdxComponents'
 
 import '../src/markdown.css'
 import theme from '../src/theme'
+
+const tmpConfigDelete = getConfig('TMP_CONTENT_DELETE') === 'false' ? false : true
 
 const components = {
   ...mdxComponents
@@ -94,7 +96,9 @@ App.getInitialProps = async ({ router: { pathname }, ctx: { req, query } }) => {
             statusCode = 404
           }
 
-          db.remove({ _id: contentId })
+          if (tmpConfigDelete) {
+            db.remove({ _id: contentId })
+          }
 
           resolve(doc)
         }

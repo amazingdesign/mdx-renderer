@@ -1,7 +1,13 @@
 import db from '../../src/db'
 
+import { getConfig } from '@bit/amazingdesign.utils.config'
+
+const tmpConfigDelete = getConfig('TMP_CONTENT_DELETE') === 'false' ? false : true
+const tmpConfigDeleteTime = getConfig('TMP_CONTENT_DELETE_TIME') || 5 * 60 * 1000
+
 export default (req, res) => {
-  const { method, content } = req.body
+  const { method } = req
+  const { content } = req.body
 
   if (method !== 'POST') {
     res.status(500).json({
@@ -17,10 +23,12 @@ export default (req, res) => {
     (err, newDoc) => {
       if (err) res.status(500).send(err)
 
-      setTimeout(
-        () => db.remove({ _id: newDoc._id }),
-        5 * 60 * 1000
-      )
+      if (tmpConfigDelete) {
+        setTimeout(
+          () => db.remove({ _id: newDoc._id }),
+          tmpConfigDeleteTime
+        )
+      }
 
       res.json(newDoc)
     }
