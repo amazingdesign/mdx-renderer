@@ -4,7 +4,7 @@ stages:
   - publishImageConfig:
       dockerfilePath: ./Dockerfile
       buildContext: .
-      tag: amazingcms/mdx-viewer:${CICD_GIT_TAG}
+      tag: amazingcms/mdx-renderer:${CICD_GIT_TAG}
       pushRemote: true
       registry: harbor.amazingdesign.eu
 timeout: 60
