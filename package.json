@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@bit/amazingdesign.utils.config": "^1.0.0",
     "@material-ui/core": "^4.4.0",
     "@mdx-js/loader": "^1.4.0",
     "@mdx-js/mdx": "^1.4.0",

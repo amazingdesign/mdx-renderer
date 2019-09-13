@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 
+import { getConfigOrFail } from '@bit/amazingdesign.utils.config'
 import { useRouter } from 'next/router'
-
 import { MDXProvider } from '@mdx-js/react'
 
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -59,12 +59,24 @@ App.getInitialProps = async ({ router: { pathname }, ctx: { req, query } }) => {
   if (pathname === '/[contentId]') {
     const fetch = require('node-fetch')
 
-    const url = process.env.CONTENT_ENDPOINT + '/' + contentId
+    let endpoint = null
 
-    const res = await fetch(url)
-    const data = await res.json()
+    try {
+      endpoint = getConfigOrFail('CONTENT_ENDPOINT')
+    } catch (error) {
+      statusCode = 500
+    }
 
-    mdxContent = data.content
+    if (!endpoint) {
+      statusCode = 500
+    } else {
+      const url = endpoint + '/' + contentId
+
+      const res = await fetch(url)
+      const data = await res.json()
+
+      mdxContent = data.content
+    }
   }
 
   if (pathname === '/tmp/[contentId]') {
