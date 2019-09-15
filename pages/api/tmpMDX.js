@@ -10,6 +10,7 @@ export default (req, res) => {
   const { content } = req.body
 
   if (method === 'OPTIONS') {
+    res.header('Access-Control-Allow-Methods', 'POST');
     res.status(200).send('OK')
 
     return
