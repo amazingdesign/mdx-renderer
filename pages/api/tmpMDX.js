@@ -9,6 +9,12 @@ export default (req, res) => {
   const { method } = req
   const { content } = req.body
 
+  if (method === 'OPTIONS') {
+    res.status(200).send('OK')
+
+    return
+  }
+
   if (method !== 'POST') {
     res.status(500).json({
       error: 'Method Not Allowed',
