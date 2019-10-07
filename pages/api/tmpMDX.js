@@ -1,3 +1,5 @@
+import Cors from 'micro-cors'
+
 import db from '../../src/db'
 
 import { getConfig } from '@bit/amazingdesign.utils.config'
@@ -5,7 +7,7 @@ import { getConfig } from '@bit/amazingdesign.utils.config'
 const tmpConfigDelete = getConfig('TMP_CONTENT_DELETE') === 'false' ? false : true
 const tmpConfigDeleteTime = getConfig('TMP_CONTENT_DELETE_TIME') || 5 * 60 * 1000
 
-export default (req, res) => {
+const endpoint = (req, res) => {
   const { method } = req
   const { content } = req.body
 
@@ -41,3 +43,8 @@ export default (req, res) => {
     }
   )
 }
+
+export default Cors({
+  allowedMethods: ['OPTIONS', 'POST'],
+  origin: '*',
+})(endpoint)
