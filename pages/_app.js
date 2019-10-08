@@ -6,6 +6,7 @@ import { MDXProvider } from '@mdx-js/react'
 
 import CssBaseline from '@material-ui/core/CssBaseline'
 import { ThemeProvider } from '@material-ui/styles'
+import * as allMUIComponents from '@material-ui/core'
 
 import db from '../src/db'
 
@@ -19,6 +20,7 @@ import theme from '../src/theme'
 const tmpConfigDelete = getConfig('TMP_CONTENT_DELETE') === 'false' ? false : true
 
 const components = {
+  ...allMUIComponents,
   ...mdxComponents
 }
 
