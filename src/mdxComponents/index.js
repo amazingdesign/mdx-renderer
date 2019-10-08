@@ -1,15 +1,19 @@
 import MUIComponents from './MUIComponents'
 import Name from './Name'
 import Optional from './Optional'
-import Tip from './Tip'
 import Player from './Player'
 import CodeSandbox from './CodeSandbox'
+import Panel from './Panel'
+import Warning from './Warning'
+import Info from './Info'
 
 export default {
   ...MUIComponents,
   Name,
   Optional,
-  Tip,
   Player,
   CodeSandbox,
+  Panel,
+  Warning,
+  Info,
 }

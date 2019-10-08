@@ -1,16 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-import MDX from '@mdx-js/runtime'
+import Panel from './Panel'
 
-const Optional = ({ title, children }) => (
-  <React.Fragment>
-    <h3>
-      [OPCJONALNY] {title}
-    </h3>
-    <MDX>
-      {children}
-    </MDX>
-  </React.Fragment>
+const Optional = (props) => (
+  <Panel
+    {...props}
+    tooltip={'Dla ciekawskich / zawartość opcjonalna'}
+    title={'🔎 ' + '[ OPCJONALNE ] ' + (props.title || '')}
+  />
 )
 
 export default Optional
