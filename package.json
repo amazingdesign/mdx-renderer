@@ -23,6 +23,7 @@
     "prismjs": "^1.17.1",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
+    "react-player": "^1.13.0",
     "remark-emoji": "^2.0.2",
     "remark-images": "^1.0.0",
     "remark-parse": "^7.0.1",
