@@ -6,6 +6,7 @@ import CodeSandbox from './CodeSandbox'
 import Panel from './Panel'
 import Warning from './Warning'
 import Info from './Info'
+import Task from './Task'
 
 export default {
   ...MUIComponents,
@@ -16,4 +17,5 @@ export default {
   Panel,
   Warning,
   Info,
+  Task,
 }
