@@ -1,5 +1,6 @@
 import React from 'react'
 
+import ChildrenUtils from 'react-children-utilities'
 import MDX from '@mdx-js/runtime'
 import Tooltip from '@material-ui/core/Tooltip'
 
@@ -27,14 +28,21 @@ const Panel = ({ title, children, tooltip }) => {
       (props) => <React.Fragment {...props} />
   )
 
+  console.log(ChildrenUtils.groupByType(children, ['text']))
+
   return (
     <BackgroundFieldWrapper>
       <TooltipComponent>
         {titleElement}
       </TooltipComponent>
-      <MDX components={mdxComponentsOverwrite}>
-        {children}
-      </MDX>
+      {
+        React.Children.map(
+          children,
+          child => (
+            <MDX components={mdxComponentsOverwrite}>{ChildrenUtils.onlyText(child)}</MDX>
+          )
+        )
+      }
     </BackgroundFieldWrapper>
   )
 }

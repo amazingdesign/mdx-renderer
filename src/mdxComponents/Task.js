@@ -6,7 +6,7 @@ const Task = (props) => (
   <Panel
     {...props}
     tooltip={'Zadanie! Wykonaj je starannie! Praktyka to najważniejsza cześć nauki!'}
-    title={'☑️ ' + '[ ZADANIE ] ' + (props.title || ' ☑️' )}
+    title={'☑️ ' + '[ ZADANIE ] ' + (props.title || '') + ' ☑️'}
   />
 )
 
