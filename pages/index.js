@@ -1,3 +1,11 @@
-import ErrorPage from 'next/error'
+import React from 'react'
+import ContentDisplayer from '../src/components/ContentDisplayer'
 
-export default () => <ErrorPage statusCode={404} />
+const UrlPage = (props) => (
+  <ContentDisplayer
+    displayWaitingForResponsive={true}
+    {...props}
+  />
+)
+
+export default UrlPage

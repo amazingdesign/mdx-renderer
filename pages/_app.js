@@ -16,6 +16,7 @@ import mdxComponents from '../src/mdxComponents'
 
 import '../src/markdown.css'
 import theme from '../src/theme'
+import { access } from 'fs'
 
 const tmpConfigDelete = getConfig('TMP_CONTENT_DELETE') === 'false' ? false : true
 
@@ -62,8 +63,33 @@ App.getInitialProps = async ({ router: { pathname }, ctx: { req, query } }) => {
 
   const accessToken = (
     query &&
-    query.bearer
+    query.accessToken
   )
+
+  if (pathname === '/') {
+    const axios = require('axios')
+
+    const url = (
+      query &&
+      query.url
+    )
+
+    if (url) {
+      try {
+        const res = await axios.get(url, { headers: { 'Authorization': `Bearer ${accessToken}` } })
+
+        mdxContent = res.data && res.data.content
+      } catch (error) {
+        statusCode = (
+          error &&
+          error.response &&
+          error.response.status
+        ) || 500
+      }
+    } else {
+      statusCode = 500
+    }
+  }
 
   if (pathname === '/[contentId]') {
     const axios = require('axios')
@@ -76,9 +102,7 @@ App.getInitialProps = async ({ router: { pathname }, ctx: { req, query } }) => {
       statusCode = 500
     }
 
-    if (!endpoint) {
-      statusCode = 500
-    } else {
+    if (endpoint) {
       const url = endpoint + '/' + contentId
 
       try {
