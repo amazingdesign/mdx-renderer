@@ -50,11 +50,42 @@ const App = ({ Component, ...props }) => {
   )
 }
 
-App.getInitialProps = async ({ router: { pathname }, ctx: { req, query } }) => {
-  if (!req) return
+const handleUrlAndAccessTokenRoute = async (query) => {
+  const axios = require('axios')
 
-  let mdxContent = null
-  let statusCode = 200
+  const accessToken = (
+    query &&
+    query.accessToken
+  )
+
+  const url = (
+    query &&
+    query.url
+  )
+
+  if (!url) return { statusCode: 500 }
+
+  try {
+    const res = await axios.get(url, { headers: { 'Authorization': `Bearer ${accessToken}` } })
+
+    return {
+      statusCode: 200,
+      mdxContent: res.data && res.data.content
+    }
+  } catch (error) {
+    return {
+      statusCode: (
+        error &&
+        error.response &&
+        error.response.status
+      ) || 500
+    }
+  }
+
+}
+
+const handleContentIdAndAccessTokenRoute = async (query) => {
+  const axios = require('axios')
 
   const contentId = (
     query &&
@@ -66,90 +97,92 @@ App.getInitialProps = async ({ router: { pathname }, ctx: { req, query } }) => {
     query.accessToken
   )
 
-  if (pathname === '/') {
-    const axios = require('axios')
+  let endpoint = null
 
-    const url = (
-      query &&
-      query.url
-    )
+  try {
+    endpoint = getConfigOrFail('CONTENT_ENDPOINT')
+  } catch (error) {
+    return { statusCode: 500 }
+  }
 
-    if (url) {
-      try {
-        const res = await axios.get(url, { headers: { 'Authorization': `Bearer ${accessToken}` } })
+  if (!endpoint) return { statusCode: 500 }
 
-        mdxContent = res.data && res.data.content
-      } catch (error) {
-        statusCode = (
-          error &&
-          error.response &&
-          error.response.status
-        ) || 500
-      }
-    } else {
-      statusCode = 500
+  const url = endpoint + '/' + contentId
+
+  try {
+    const res = await axios.get(url, { headers: { 'Authorization': `Bearer ${accessToken}` } })
+
+    return {
+      statusCode: 200,
+      mdxContent: res.data && res.data.content,
+    }
+  } catch (error) {
+    return {
+      statusCode: (
+        error &&
+        error.response &&
+        error.response.status
+      ) || 500
     }
   }
 
-  if (pathname === '/[contentId]') {
-    const axios = require('axios')
+}
 
-    let endpoint = null
+const handleTmpContentIdRoute = async (query) => {
+  const contentId = (
+    query &&
+    query.contentId
+  )
 
-    try {
-      endpoint = getConfigOrFail('CONTENT_ENDPOINT')
-    } catch (error) {
-      statusCode = 500
-    }
+  const findTmpContentPromise = new Promise((resolve, reject) => {
+    db.findOne(
+      { _id: contentId },
+      (err, doc) => {
+        if (err) reject(err.status || err.code || 500)
 
-    if (endpoint) {
-      const url = endpoint + '/' + contentId
+        if (!doc) reject(404)
 
-      try {
-        const res = await axios.get(url, { headers: { 'Authorization': `Bearer ${accessToken}` } })
-
-        mdxContent = res.data && res.data.content
-      } catch (error) {
-        statusCode = (
-          error &&
-          error.response &&
-          error.response.status
-        ) || 500
-      }
-    }
-  }
-
-  if (pathname === '/tmp/[contentId]') {
-    const findTmpContentPromise = new Promise((resolve, reject) => {
-      db.findOne(
-        { _id: contentId },
-        (err, doc) => {
-          if (err) {
-            resolve(null)
-            statusCode = err.status || err.code || 500
-          }
-          if (!doc) {
-            resolve(null)
-            statusCode = 404
-          }
-
-          if (tmpConfigDelete) {
-            db.remove({ _id: contentId })
-          }
-
-          resolve(doc)
+        if (tmpConfigDelete) {
+          db.remove({ _id: contentId })
         }
-      )
-    })
 
+        resolve(doc)
+      }
+    )
+  })
+
+  try {
     const data = await findTmpContentPromise
-
-    mdxContent = data && data.content
+    return {
+      statusCode: 200,
+      mdxContent: data && data.content,
+    }
+  } catch (error) {
+    return {
+      statusCode: error,
+      mdxContent: null,
+    }
   }
 
-  return {
-    statusCode,
-    mdxContent
+
+}
+
+App.getInitialProps = async ({ router: { pathname }, ctx: { req, query } }) => {
+  // server only
+  if (!req) return
+
+  switch (pathname) {
+    case '/':
+      return await handleUrlAndAccessTokenRoute(query)
+    case '/[contentId]':
+      return await handleContentIdAndAccessTokenRoute(query)
+    case '/tmp/[contentId]':
+      return await handleTmpContentIdRoute(query)
+    default:
+      return {
+        statusCode: 404,
+        mdxContent: null,
+      }
   }
 }
 
