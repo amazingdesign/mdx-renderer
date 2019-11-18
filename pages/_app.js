@@ -60,8 +60,13 @@ App.getInitialProps = async ({ router: { pathname }, ctx: { req, query } }) => {
     query.contentId
   )
 
+  const accessToken = (
+    query &&
+    query.bearer
+  )
+
   if (pathname === '/[contentId]') {
-    const fetch = require('node-fetch')
+    const axios = require('axios')
 
     let endpoint = null
 
@@ -76,15 +81,21 @@ App.getInitialProps = async ({ router: { pathname }, ctx: { req, query } }) => {
     } else {
       const url = endpoint + '/' + contentId
 
-      const res = await fetch(url)
-      const data = await res.json()
+      try {
+        const res = await axios.get(url, { headers: { 'Authorization': `Bearer ${accessToken}` } })
 
-      mdxContent = data.content
+        mdxContent = res.data && res.data.content
+      } catch (error) {
+        statusCode = (
+          error &&
+          error.response &&
+          error.response.status
+        ) || 500
+      }
     }
   }
 
   if (pathname === '/tmp/[contentId]') {
-
     const findTmpContentPromise = new Promise((resolve, reject) => {
       db.findOne(
         { _id: contentId },
