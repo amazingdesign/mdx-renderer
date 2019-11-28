@@ -66,7 +66,10 @@ const handleUrlAndAccessTokenRoute = async (query) => {
   if (!url) return { statusCode: 500 }
 
   try {
-    const res = await axios.get(url, { headers: { 'Authorization': `Bearer ${accessToken}` } })
+    const res = await axios.get(
+      url,
+      accessToken && { headers: { 'Authorization': `Bearer ${accessToken}` } }
+    )
 
     return {
       statusCode: 200,
@@ -110,8 +113,11 @@ const handleContentIdAndAccessTokenRoute = async (query) => {
   const url = endpoint + '/' + contentId
 
   try {
-    const res = await axios.get(url, { headers: { 'Authorization': `Bearer ${accessToken}` } })
-
+    const res = await axios.get(
+      url,
+      accessToken && { headers: { 'Authorization': `Bearer ${accessToken}` } }
+    )
+    
     return {
       statusCode: 200,
       mdxContent: res.data && res.data.content,
