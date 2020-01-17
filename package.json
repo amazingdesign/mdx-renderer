@@ -5,7 +5,10 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "docker": "docker build . -t harbor.amazingdesign.eu/amazingcms/mdx-renderer:$(sed -nE 's/^\\s*\"version\": \"(.*?)\",$/\\1/p' package.json)",
+    "docker:push": "docker push harbor.amazingdesign.eu/amazingcms/mdx-renderer:$(sed -nE 's/^\\s*\"version\": \"(.*?)\",$/\\1/p' package.json)",
+    "docker:deploy": "npm run docker && npm run docker:push"
   },
   "dependencies": {
     "@bit/amazingdesign.utils.config": "^1.0.0",
