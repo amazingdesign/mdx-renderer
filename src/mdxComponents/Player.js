@@ -38,8 +38,8 @@ const Player = (props) => {
   const ratio = props.ratio || 16 / 9
   const getMaxWidth = () => {
     // components are in markdown-body div 
-    // 720px max width and16 px of padding
-    const maxWidth = 720 - 2 * 16
+    // 1200px max width and 16 px of padding
+    const maxWidth = 1200 - 2 * 16
 
     return Math.min(windowSize.width || maxWidth, maxWidth)
   }
@@ -50,6 +50,7 @@ const Player = (props) => {
       controls={true}
       width={null}
       height={getMaxWidth() / ratio}
+      config={{ youtube: { playerVars: { modestbranding: 1, rel: 0, fs: 1 } } }}
       {...props}
     />
   )
