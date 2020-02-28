@@ -7,6 +7,7 @@ import Panel from './Panel'
 import Warning from './Warning'
 import Info from './Info'
 import Task from './Task'
+import CollapseWithButton from './CollapseWithButton'
 
 export default {
   ...MUIComponents,
@@ -18,4 +19,5 @@ export default {
   Warning,
   Info,
   Task,
+  CollapseWithButton,
 }
