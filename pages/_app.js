@@ -16,7 +16,6 @@ import mdxComponents from '../src/mdxComponents'
 
 import '../src/markdown.css'
 import theme from '../src/theme'
-import { access } from 'fs'
 
 const tmpConfigDelete = getConfig('TMP_CONTENT_DELETE') === 'false' ? false : true
 
@@ -50,6 +49,40 @@ const App = ({ Component, ...props }) => {
   )
 }
 
+
+// POST
+const handleDirectContentRoute = async (query, req) => {
+  const bodyParser = require('body-parser')
+
+  await new Promise((resolve, reject) => {
+    try {
+      bodyParser.json()(req, null, resolve)
+    } catch (error) {
+      reject(error)
+    }
+  })
+
+  const contentFromQuery = (
+    query &&
+    query.content
+  )
+
+  const contentFromBody = (
+    req &&
+    req.body &&
+    req.body.content
+  )
+
+  const content = contentFromBody || contentFromQuery
+
+  return {
+    statusCode: 200,
+    mdxContent: content
+  }
+
+}
+
+// GET
 const handleUrlAndAccessTokenRoute = async (query) => {
   const axios = require('axios')
 
@@ -87,6 +120,7 @@ const handleUrlAndAccessTokenRoute = async (query) => {
 
 }
 
+// GET
 const handleContentIdAndAccessTokenRoute = async (query) => {
   const axios = require('axios')
 
@@ -117,7 +151,7 @@ const handleContentIdAndAccessTokenRoute = async (query) => {
       url,
       accessToken && { headers: { 'Authorization': `Bearer ${accessToken}` } }
     )
-    
+
     return {
       statusCode: 200,
       mdxContent: res.data && res.data.content,
@@ -134,6 +168,7 @@ const handleContentIdAndAccessTokenRoute = async (query) => {
 
 }
 
+// GET
 const handleTmpContentIdRoute = async (query) => {
   const contentId = (
     query &&
@@ -179,6 +214,7 @@ App.getInitialProps = async ({ router: { pathname }, ctx: { req, query } }) => {
 
   switch (pathname) {
     case '/':
+      if (req.method === 'POST') return await handleDirectContentRoute(query, req)
       return await handleUrlAndAccessTokenRoute(query)
     case '/[contentId]':
       return await handleContentIdAndAccessTokenRoute(query)

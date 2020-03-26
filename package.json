@@ -19,6 +19,7 @@
     "@next/mdx": "^9.0.3",
     "@zeit/next-css": "^1.0.1",
     "axios": "^0.19.0",
+    "body-parser": "^1.19.0",
     "dotenv": "^8.1.0",
     "micro-cors": "^0.1.1",
     "nedb": "^1.8.0",
