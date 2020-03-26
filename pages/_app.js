@@ -54,13 +54,22 @@ const App = ({ Component, ...props }) => {
 const handleDirectContentRoute = async (query, req) => {
   const bodyParser = require('body-parser')
 
-  await new Promise((resolve, reject) => {
+  const jsonParserPromise = new Promise((resolve, reject) => {
     try {
       bodyParser.json()(req, null, resolve)
     } catch (error) {
       reject(error)
     }
   })
+  const urlParserPromise = new Promise((resolve, reject) => {
+    try {
+      bodyParser.urlencoded({ extended: false })(req, null, resolve)
+    } catch (error) {
+      reject(error)
+    }
+  })
+
+  await Promise.all([jsonParserPromise, urlParserPromise])
 
   const contentFromQuery = (
     query &&
