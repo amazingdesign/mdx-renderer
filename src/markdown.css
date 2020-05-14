@@ -9,6 +9,7 @@
 .markdown-body pre {
   background: #f7f7f7;
   border-radius: 4px;
+  overflow-x: auto;
 }
 
 .markdown-body :not(pre) code {
