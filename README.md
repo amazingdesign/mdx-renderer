@@ -50,6 +50,9 @@ TMP_CONTENT_DELETE=
 # How long tmp content will be stored (default 300000 = 5 minutes)
 TMP_CONTENT_DELETE_TIME=
 
+# Should app render info about waiting to client app run (default true)
+DISPLAY_WAITING_FOR_RESPONSIVE=
+
 # (default empty)
 CONTENT_ENDPOINT=
 ```
