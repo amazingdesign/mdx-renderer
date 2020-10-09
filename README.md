@@ -2,13 +2,29 @@
 
 ## Usage
 
+### Direct render
+
+App can render MDX in respond for POST request at `/` endpoint.
+
+The request should contain JSON body in shape below:
+
+```json
+{
+  "content": "# MDX Content"
+}
+```
+
+The rendered content is not stored anywhere.
+
+**Tip** Yes, you CAN render POST request in the iFrame by submitting `<form>` with `method="POST"`and hidden input with `name="content"` targeting that iFrame.
+
 ### Render forom database
 
 This app can fetch content form REST API.
 
 The endpoint with content should be set in `.env` as `CONTENT_ENDPOINT`.
 
-It should be a GET endpoint (`https://example.com/contenr/:contentId`) that returns JSON:
+It should be a GET endpoint (`https://example.com/content/:contentId`) that returns JSON:
 
 ```json
 {
